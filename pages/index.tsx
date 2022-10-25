@@ -7,7 +7,7 @@ const Home: NextPage = () => {
 
   return (
     <div className=' flex flex-col fixed w-full h-full overflow-hidden ' >
-      <div className=' w-1/4 h-1/4 border-2 border-solid border-black mx-auto my-auto p-12 rounded-md'>
+      <div className=' w-1/4 border-2 border-solid border-black mx-auto my-auto p-12 rounded-md'>
         <span className='text-center text-5xl p-4 font-bolder block '>
           App "TO DO"
         </span>        

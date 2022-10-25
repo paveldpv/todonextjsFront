@@ -1,6 +1,7 @@
 import React, { useReducer, useState } from 'react'
 import axios from 'axios'
 import {validaterEmail} from './../../function/validaterEmail'
+import {url} from '../../config/config'
 
 type Props = {}
 
@@ -37,8 +38,12 @@ export default function auth({}: Props) {
     e.preventDefault()    
     try {
         if(validaterEmail(email)){
-          let res = await axios.post(`http://localhost:3200/auth`,{email,password})
-          console.log(res.data);          
+          console.log(`${url}auth`);          
+          let res = await axios.post(`${url}auth`,{email,password})
+          console.log(res.data.bearer);  
+          const bearer = res.data.bearer
+          localStorage.setItem(`token`,bearer)
+          res.data.auth?window.location.href=`/todo/${email}`:alert(`error server`);                            
         }
         else{
           setError(true)
@@ -58,22 +63,24 @@ export default function auth({}: Props) {
         {registrateMessage}
       </div>
         <hr />
-      <form className=' flex flex-col'>
+       <form className=' flex flex-col'>       
         <input type="text" placeholder='email' value={email}
-        className={`${error&& "bg-red-400"} my-4 p-6 rounded-md`}
-        onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setEmail(e.target.value)}/>
+          className={`${error&& "bg-red-400"} my-4 p-6 rounded-md`}
+          onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setEmail(e.target.value)}/>
         <hr />
         <input type="password" placeholder='password' value={password}
-        className=' my-4 p-6 rounded-sm'
-        onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setPassword(e.target.value)}/>
+          className=' my-4 p-6 rounded-sm'
+          onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setPassword(e.target.value)}/>
         <button className='w-full bg-green-400 p-5 text-4xl font-bold rounded-md hover:bg-green-500'
         onClick={(e:React.MouseEvent<Element, MouseEvent>)=>registrate(e)}>
           Registrate
-        </button>
-        <button className='w-full bg-blue-400 p-5 text-4xl font-bold my-4 rounded-md hover:bg-blue-500'
-        onClick={(e:React.MouseEvent<Element, MouseEvent>)=>auth(e)}>
-          Login
-        </button>
+        </button>        
+          
+            <button className='w-full bg-blue-400 p-5 text-4xl font-bold my-4 rounded-md hover:bg-blue-500'
+            onClick={(e:React.MouseEvent<Element, MouseEvent>)=>auth(e)}>
+              Login
+            </button>
+            
       </form>
     </div>
   )
